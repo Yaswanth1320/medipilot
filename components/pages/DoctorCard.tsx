@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-type DoctorAgent = {
+export type DoctorAgent = {
   id: number;
   specialist: string;
   description: string;
@@ -25,7 +25,7 @@ const itemVariants = {
 const DoctorCard = ({ doctorAgent }: Props) => {
   return (
     <motion.div
-    //@ts-ignore
+      //@ts-ignore
       variants={itemVariants}
       whileHover={{
         y: -6,
@@ -37,20 +37,20 @@ const DoctorCard = ({ doctorAgent }: Props) => {
     >
       <div className="relative h-74 w-full">
         <Image
-          src={doctorAgent.image}
-          alt={`Image of a ${doctorAgent.specialist}`}
-          layout="fill"
-          objectFit="cover"
-          objectPosition="center"
+          src={doctorAgent?.image}
+          alt={`Image of a ${doctorAgent?.specialist}`}
+          fill
+          className="object-cover object-center"
+          sizes="(min-width: 1280px) 20vw, (min-width: 1024px) 25vw, (min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
         />
       </div>
       <div className="flex flex-grow flex-col p-4">
         <div className="flex-grow">
           <h3 className="text-lg font-bold text-white">
-            {doctorAgent.specialist}
+            {doctorAgent?.specialist}
           </h3>
           <p className="mt-1 text-sm text-neutral-400">
-            {doctorAgent.description}
+            {doctorAgent?.description}
           </p>
         </div>
         <button className="mt-2 w-full rounded-lg bg-neutral-800 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-600">

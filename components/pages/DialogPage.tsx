@@ -1,15 +1,54 @@
+"use client";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import React from "react";
+import React, { useState } from "react";
+import { Textarea } from "../ui/textarea";
+import { Button } from "../ui/button";
+import axios from "axios";
+import DoctorCard, { DoctorAgent } from "./DoctorCard";
+import { Loader2 } from "lucide-react";
+import { SuggestedDoctorCard } from "./SuggestedDoctorCard";
+import { AIDoctorAgents } from "@/constants/list";
+import { useRouter } from "next/navigation";
 
 const DialogPage = () => {
+  const [userProblem, setUserProblem] = useState<string>();
+  const [loading, setLoading] = useState(false);
+  const [suggestedDoctors, setSuggestedDoctors] = useState<DoctorAgent[]>();
+  const [selectedDoctor, setSelectedDoctor] = useState<DoctorAgent>();
+  const router = useRouter();
+  const onClickProceed = async () => {
+    setLoading(true);
+    const result = await axios.post("/api/suggestions", {
+      userProblem: userProblem,
+    });
+    console.log(result?.data);
+    setSuggestedDoctors(result?.data);
+    setLoading(false);
+  };
+
+  const onstartConsultation = async () => {
+    setLoading(true);
+    const result = await axios.post("/api/sessionchat", {
+      userProblem,
+      selectedDoctor,
+    });
+    console.log(result?.data);
+    if (result?.data?.sessionId) {
+      console.log(result?.data?.sessionId);
+      router.push("/dashboard/conversation/" + result?.data?.sessionId);
+    }
+    setLoading(false);
+  };
+
   return (
     <Dialog>
       <DialogTrigger className="flex items-center gap-2 rounded-lg border border-neutral-700 bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-800">
@@ -17,12 +56,51 @@ const DialogPage = () => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Are you absolutely sure?</DialogTitle>
-          <DialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
+          <DialogTitle>Add Basic Details</DialogTitle>
+          <DialogDescription asChild>
+            {!suggestedDoctors ? (
+              <div>
+                <h2>Add the symptoms or your problem</h2>
+                <Textarea
+                  className="mt-2 h-[180px]"
+                  placeholder="Add your details..."
+                  onChange={(e) => setUserProblem(e.target.value)}
+                />
+              </div>
+            ) : (
+              <div className="grid grid-cols-3 gap-4 pt-4">
+                {suggestedDoctors?.map((doctor, idx) => (
+                  <SuggestedDoctorCard
+                    doctorAgent={doctor}
+                    key={idx}
+                    setSelectedDoctor={() => setSelectedDoctor(doctor)}
+                    //@ts-ignore
+                    selectedDoctor={selectedDoctor}
+                  />
+                ))}
+              </div>
+            )}
           </DialogDescription>
         </DialogHeader>
+        <DialogFooter>
+          <Button variant={"outline"}>cancel</Button>
+          {!suggestedDoctors ? (
+            <Button disabled={!userProblem} onClick={() => onClickProceed()}>
+              {loading ? <Loader2 className="animate-spin" /> : <p>Proceed</p>}
+            </Button>
+          ) : (
+            <Button
+              disabled={loading || !selectedDoctor}
+              onClick={() => onstartConsultation()}
+            >
+              {loading ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                <p>start consultation</p>
+              )}
+            </Button>
+          )}
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
