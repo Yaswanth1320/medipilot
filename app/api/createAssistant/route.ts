@@ -3,7 +3,7 @@ import { VapiClient } from "@vapi-ai/server-sdk";
 import { NextResponse } from "next/server";
 
 const vapi = new VapiClient({
-  token: "92b03ec2-5188-4b10-9215-2aa030e5fbe3",
+  token: process.env.NEXT_PUBLIC_VAPI_API_KEY_PRIVATE!,
 });
 
 export async function POST(req: Request) {
