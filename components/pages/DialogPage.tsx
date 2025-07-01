@@ -30,7 +30,6 @@ const DialogPage = () => {
     const result = await axios.post("/api/suggestions", {
       userProblem: userProblem,
     });
-    console.log(result?.data);
     setSuggestedDoctors(result?.data);
     setLoading(false);
   };
@@ -41,9 +40,7 @@ const DialogPage = () => {
       userProblem,
       selectedDoctor,
     });
-    console.log(result?.data);
     if (result?.data?.sessionId) {
-      console.log(result?.data?.sessionId);
       router.push("/dashboard/conversation/" + result?.data?.sessionId);
     }
     setLoading(false);
@@ -60,7 +57,7 @@ const DialogPage = () => {
           <DialogDescription asChild>
             {!suggestedDoctors ? (
               <div>
-                <h2>Add the symptoms or your problem</h2>
+                <h2>Be specific about your problem and write it correctly</h2>
                 <Textarea
                   className="mt-2 h-[180px]"
                   placeholder="Add your details..."

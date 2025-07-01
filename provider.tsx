@@ -16,7 +16,6 @@ function Provider({
   const checkUserAndAddToDb = async () => {
     const result = await axios.post("/api/users");
     setuserdetail(result.data);
-    console.log(result.data);
   };
   useEffect(() => {
     user && checkUserAndAddToDb();
