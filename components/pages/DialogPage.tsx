@@ -16,7 +16,6 @@ import axios from "axios";
 import DoctorCard, { DoctorAgent } from "./DoctorCard";
 import { Loader2 } from "lucide-react";
 import { SuggestedDoctorCard } from "./SuggestedDoctorCard";
-import { AIDoctorAgents } from "@/constants/list";
 import { useRouter } from "next/navigation";
 
 const DialogPage = () => {
@@ -66,21 +65,36 @@ const DialogPage = () => {
               </div>
             ) : (
               <div className="grid grid-cols-3 gap-4 pt-4">
-                {suggestedDoctors?.map((doctor, idx) => (
-                  <SuggestedDoctorCard
-                    doctorAgent={doctor}
-                    key={idx}
-                    setSelectedDoctor={() => setSelectedDoctor(doctor)}
-                    //@ts-ignore
-                    selectedDoctor={selectedDoctor}
-                  />
-                ))}
+                {suggestedDoctors.length == 0 ? (
+                  <p>no doctors found</p>
+                ) : (
+                  <>
+                    {suggestedDoctors &&
+                      suggestedDoctors?.map((doctor, idx) => (
+                        <SuggestedDoctorCard
+                          doctorAgent={doctor}
+                          key={idx}
+                          setSelectedDoctor={() => setSelectedDoctor(doctor)}
+                          //@ts-ignore
+                          selectedDoctor={selectedDoctor}
+                        />
+                      ))}
+                  </>
+                )}
               </div>
             )}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button variant={"outline"}>cancel</Button>
+          <Button
+            variant={"outline"}
+            onClick={() => {
+              //@ts-ignore
+              setSuggestedDoctors(null);
+            }}
+          >
+            cancel
+          </Button>
           {!suggestedDoctors ? (
             <Button disabled={!userProblem} onClick={() => onClickProceed()}>
               {loading ? <Loader2 className="animate-spin" /> : <p>Proceed</p>}

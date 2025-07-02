@@ -8,7 +8,7 @@ import React from "react";
 const navLinks = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/dashboard/history", label: "History" },
-  { href: "/dashboard/analytics", label: "Analytics" },
+  { href: "/dashboard/pricing", label: "Pricing" },
   { href: "/dashboard/settings", label: "Settings" },
 ];
 

@@ -25,7 +25,7 @@ export const SuggestedDoctorCard = ({
         alt={doctorAgent?.specialist}
         width={70}
         height={70}
-        className="w-[50px] height-[50px] rounded-4xl object-cover"
+        className="w-[50px] h-[50px] rounded-full object-cover"
       />
       <h2 className="font-bold text-sm text-center mt-1">
         {doctorAgent?.specialist}

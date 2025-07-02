@@ -4,11 +4,12 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { Circle, Loader2, PhoneCallIcon, PhoneOff } from "lucide-react";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Vapi from "@vapi-ai/web";
+import { toast } from "sonner";
 
-type SessionType = {
+export type SessionType = {
   id: number;
   sessionId: string;
   notes: string;
@@ -33,6 +34,7 @@ const VoiceAgent = () => {
   const [liveTranscripts, setLiveTranscripts] = useState<string>();
   const [messages, setMessages] = useState<messages[]>([]);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     if (sessionId) {
@@ -141,9 +143,11 @@ const VoiceAgent = () => {
     vapiInstance.stop();
 
     setVapiInstance(null);
-    setCallStarted(false);
     const result = await generateReport();
-    setLoading(false);
+    setCallStarted(false);
+    consumeCredit();
+    toast.success("Your report has been genarated");
+    router.replace("/dashboard");
   };
 
   const generateReport = async () => {
@@ -155,6 +159,29 @@ const VoiceAgent = () => {
     console.log(result.data);
     return result.data;
   };
+
+  async function consumeCredit() {
+    try {
+      const response = await fetch("/api/user/credits", {
+        method: "PATCH",
+      });
+
+      if (!response.ok) {
+        // The server will return a specific error message in the JSON body
+        const errorData = await response.json();
+        console.error("Failed to update credits:", errorData.error);
+        alert(`Error: ${errorData.error}`);
+        return;
+      }
+
+      const updatedUser = await response.json();
+      console.log("Credits updated successfully!", updatedUser);
+      // Now you can update your UI state with the new credit count
+      // e.g., setUserCredits(updatedUser.credits);
+    } catch (error) {
+      console.error("A network error occurred:", error);
+    }
+  }
 
   return (
     <div className="h-[91vh] py-6">
@@ -217,8 +244,17 @@ const VoiceAgent = () => {
                 className="mt-20 bg-red-500 hover:border hover:border-white"
                 disabled={loading}
               >
-                {loading ? <Loader2 className="animate-spin" /> : <PhoneOff />}
-                Disconnect
+                {loading ? (
+                  <>
+                    <Loader2 className="animate-spin" /> Generating Report
+                  </>
+                ) : (
+                  <>
+                    {" "}
+                    <PhoneOff />
+                    Disconnect
+                  </>
+                )}
               </Button>
             )}
           </div>

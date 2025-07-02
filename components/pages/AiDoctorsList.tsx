@@ -27,7 +27,7 @@ export const AiDoctorsList = () => {
       transition={{ duration: 0.5, delay: 0.6 }}
     >
       <h2 className="mb-4 text-xl font-bold text-slate-100">
-        AI Doctors Expert
+        AI Doctors Expert List
       </h2>
       <motion.div
         variants={containerVariants}

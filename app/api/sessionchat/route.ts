@@ -1,7 +1,7 @@
 import { db } from "@/config/db";
 import { SessionTable } from "@/config/schema";
 import { currentUser } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 
@@ -33,11 +33,24 @@ export async function GET(req: NextRequest) {
   const sessionId = searchParams.get("sessionId");
   const user = await currentUser();
 
-  const result = await db
-    .select()
-    .from(SessionTable)
-    //@ts-ignore
-    .where(eq(SessionTable.sessionId, sessionId));
+  if (sessionId == "all") {
+    const result = await db
+      .select()
+      .from(SessionTable)
+      .where(
+        //@ts-ignore
+        eq(SessionTable.createdBy, user?.primaryEmailAddress?.emailAddress)
+      )
+      .orderBy(desc(SessionTable.id));
 
-  return NextResponse.json(result[0]);
+    return NextResponse.json(result);
+  } else {
+    const result = await db
+      .select()
+      .from(SessionTable)
+      //@ts-ignore
+      .where(eq(SessionTable.sessionId, sessionId));
+
+    return NextResponse.json(result[0]);
+  }
 }

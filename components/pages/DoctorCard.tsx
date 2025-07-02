@@ -1,5 +1,5 @@
 "use client";
-
+import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
@@ -33,8 +33,16 @@ const DoctorCard = ({ doctorAgent }: Props) => {
         borderColor: "rgba(59, 130, 246, 0.3)",
       }}
       transition={{ type: "spring", stiffness: 300 }}
-      className="flex cursor-pointer flex-col overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900"
+      className="flex cursor-pointer flex-col overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900 relative"
     >
+      {doctorAgent.subscriptionRequired && (
+        <Badge
+          variant="default"
+          className="absolute right-2 text-[10px] mt-2 z-50"
+        >
+          Premium
+        </Badge>
+      )}
       <div className="relative h-74 w-full">
         <Image
           src={doctorAgent?.image}
@@ -53,9 +61,9 @@ const DoctorCard = ({ doctorAgent }: Props) => {
             {doctorAgent?.description}
           </p>
         </div>
-        <button className="mt-2 w-full rounded-lg bg-neutral-800 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-600">
+        {/* <button className="mt-2 w-full rounded-lg bg-neutral-800 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-600">
           Start Consultation
-        </button>
+        </button> */}
       </div>
     </motion.div>
   );

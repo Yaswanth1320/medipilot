@@ -52,7 +52,7 @@ export function HeroSection() {
           transition={{ duration: 0.6, delay: 1.0, ease: "easeOut" }}
           className="mt-8 flex flex-wrap items-center justify-center gap-4"
         >
-          <Link href={"/sign-in"}>
+          <Link href={"/dashboard"}>
             <button className="w-60 transform rounded-lg bg-blue-600 px-6 py-3 font-medium text-white transition-all duration-300 hover:-translate-y-1 hover:bg-blue-700">
               Get started
             </button>

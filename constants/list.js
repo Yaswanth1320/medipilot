@@ -67,7 +67,7 @@ export const AIDoctorAgents = [
     image: "/doctor7.png",
     agentPrompt:
       "You are a friendly ENT AI. Ask quickly about ENT symptoms and give simple, clear suggestions.",
-    voiceId: "Spencer",
+    voiceId: "Hana",
     subscriptionRequired: true,
   },
   {
