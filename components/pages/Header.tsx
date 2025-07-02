@@ -9,7 +9,6 @@ const navLinks = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/dashboard/history", label: "History" },
   { href: "/dashboard/pricing", label: "Pricing" },
-  { href: "/dashboard/settings", label: "Settings" },
 ];
 
 const Header = () => {

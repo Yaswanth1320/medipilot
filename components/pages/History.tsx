@@ -30,8 +30,8 @@ export const History = () => {
       transition={{ duration: 0.5, ease: "easeOut", delay: 0.4 }}
       className="flex flex-col items-center justify-center gap-4 rounded-lg border-2 border-dashed border-neutral-800 p-8 text-center"
     >
-      {!history ? (
-        <div>
+      {history.length == 0 ? (
+        <div className="flex flex-col gap-2 items-center justify-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-15 w-15 text-neutral-400"
