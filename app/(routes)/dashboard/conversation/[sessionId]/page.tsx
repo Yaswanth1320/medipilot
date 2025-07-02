@@ -145,7 +145,6 @@ const VoiceAgent = () => {
     setVapiInstance(null);
     const result = await generateReport();
     setCallStarted(false);
-    consumeCredit();
     toast.success("Your report has been genarated");
     router.replace("/dashboard");
   };
